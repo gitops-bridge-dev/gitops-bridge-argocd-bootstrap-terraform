@@ -8,6 +8,64 @@ It handles three aspect of ArgoCD bootstrap
 
 To be use with [gitops-bridge](https://github.com/gitops-bridge-dev/) project, see example [here](https://github.com/gitops-bridge-dev/gitops-bridge/blob/main/argocd/iac/terraform/examples/eks/hello-world/main.tf)
 
+## Usage
+
+```hcl
+
+locals {
+  name                   = "ex-${replace(basename(path.cwd), "_", "-")}"
+  environment            = "dev"
+  cluster_version        = "1.27"
+  gitops_addons_url      = "https://github.com/gitops-bridge-devgitops-bridge-argocd-control-plane-template"
+  gitops_addons_basepath = ""
+  gitops_addons_path     = "bootstrap/control-plane/addons"
+  gitops_addons_revision = "HEAD"
+
+  oss_addons = {
+    enable_argo_workflows = true
+    enable_foo                                   = true # you can add any addon here, make sure to update the gitops repo with the corresponding application set
+  }
+  addons = merge(local.oss_addons, { kubernetes_version = local.cluster_version })
+
+  addons_metadata = merge(
+    {
+      addons_repo_url      = local.gitops_addons_url
+      addons_repo_basepath = local.gitops_addons_basepath
+      addons_repo_path     = local.gitops_addons_path
+      addons_repo_revision = local.gitops_addons_revision
+    }
+  )
+
+  argocd_bootstrap_app_of_apps = {
+    addons = file("${path.module}/bootstrap/addons.yaml")
+  }
+
+}
+
+###########################################################################
+# GitOps Bridge: Metadata
+###########################################################################
+module "gitops_bridge_metadata" {
+  source = "github.com/gitops-bridge-dev/gitops-bridge-argocd-metadata-terraform?ref=v1.0.0"
+
+  cluster_name = local.name
+  environment  = local.environment
+  metadata     = local.addons_metadata
+  addons       = local.addons
+}
+
+###########################################################################
+# GitOps Bridge: Bootstrap
+###########################################################################
+module "gitops_bridge_bootstrap" {
+  source = "github.com/gitops-bridge-dev/gitops-bridge-argocd-bootstrap-terraform?ref=v1.0.0"
+
+  argocd_cluster               = module.gitops_bridge_metadata.argocd
+  argocd_bootstrap_app_of_apps = local.argocd_bootstrap_app_of_apps
+}
+
+```
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 

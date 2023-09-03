@@ -72,5 +72,4 @@ module "gitops_bridge_bootstrap" {
 
   argocd_cluster               = module.gitops_bridge_metadata.argocd
   argocd_bootstrap_app_of_apps = local.argocd_bootstrap_app_of_apps
-
 }
