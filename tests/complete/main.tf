@@ -15,10 +15,10 @@ locals {
   name                   = "ex-${replace(basename(path.cwd), "_", "-")}"
   environment            = "dev"
   cluster_version        = "1.27"
-  gitops_addons_url      = "${var.gitops_addons_org}/${var.gitops_addons_repo}"
-  gitops_addons_basepath = var.gitops_addons_basepath
-  gitops_addons_path     = var.gitops_addons_path
-  gitops_addons_revision = var.gitops_addons_revision
+  gitops_addons_url      = "https://github.com/gitops-bridge-dev/gitops-bridge-argocd-control-plane-template"
+  gitops_addons_basepath = ""
+  gitops_addons_path     = "bootstrap/control-plane/addons"
+  gitops_addons_revision = "HEAD"
 
   oss_addons = {
     #enable_argo_rollouts                         = true

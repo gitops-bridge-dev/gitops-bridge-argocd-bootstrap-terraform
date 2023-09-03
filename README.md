@@ -16,7 +16,7 @@ locals {
   name                   = "ex-${replace(basename(path.cwd), "_", "-")}"
   environment            = "dev"
   cluster_version        = "1.27"
-  gitops_addons_url      = "https://github.com/gitops-bridge-devgitops-bridge-argocd-control-plane-template"
+  gitops_addons_url      = "https://github.com/gitops-bridge-dev/gitops-bridge-argocd-control-plane-template"
   gitops_addons_basepath = ""
   gitops_addons_path     = "bootstrap/control-plane/addons"
   gitops_addons_revision = "HEAD"
