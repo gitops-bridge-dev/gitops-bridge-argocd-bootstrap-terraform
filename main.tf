@@ -90,10 +90,21 @@ resource "kubernetes_secret_v1" "cluster" {
 ################################################################################
 # Create App of Apps
 ################################################################################
-resource "kubectl_manifest" "bootstrap" {
+resource "helm_release" "bootstrap" {
   for_each = var.create ? var.argocd_bootstrap_app_of_apps : {}
 
-  yaml_body = each.value
+  name       = each.key
+  namespace  = "argocd"
+  repository = "https://bedag.github.io/helm-charts/"
+  chart      = "raw"
+  version    = "2.0.0"
+
+  values = [
+    <<-EOT
+resources:
+  - ${indent(4, each.value)}
+    EOT
+  ]
 
   depends_on = [resource.kubernetes_secret_v1.cluster]
 }
