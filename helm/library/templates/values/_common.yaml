@@ -1,0 +1,27 @@
+{{/*
+  Common Values - Template
+*/}}
+{{- define "lib.values.common" -}}
+## Common Values
+##
+
+## Overwrite Name Template
+# nameOverride -- Overwrite "lib.internal.common.name" output
+nameOverride: ""
+
+## Overwrite Fullname Template
+# fullnameOverride -- Overwrite `lib.utils.common.fullname` output
+fullnameOverride: ""
+
+## Common Labels
+# commonLabels -- Common Labels are added to each kubernetes resource manifest.
+commonLabels: {}
+
+## Overwrite Labels
+# overwriteLabels -- Overwrites default labels, but not resource specific labels and common labels
+overwriteLabels: {}
+
+## Selector Labels
+# selectorLabels -- Define default [selectorLabels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+selectorLabels: {}
+{{- end }}

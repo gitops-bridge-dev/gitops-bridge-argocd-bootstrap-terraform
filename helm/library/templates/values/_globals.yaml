@@ -1,0 +1,78 @@
+{{/*
+  Global Values - Template
+*/}}
+{{- define "lib.values.globals" -}}
+## Global Values 
+##
+global:
+
+  ## Global Docker Image Registry
+  # global.imageRegistry -- Global Docker Image Registry declaration. Will overwrite all child .registry fields.
+  imageRegistry: ""
+
+  ## Global Default Image Tag
+  # global.defaultTag -- Global Docker Image Tag declaration. Will be used as default tag, if no tag is given by child
+  defaultTag: ""
+
+  ## Global Docker Image PullPolicy
+  # global.imagePullPolicy -- Global Docker Image Pull Policy declaration. Will overwrite all child .pullPolicy fields.
+  imagePullPolicy: ""
+
+  ## Global StorageClass
+  # global.storageClass -- Global StorageClass declaration. Can be used to overwrite StorageClass fields.
+  storageClass: ""
+
+  ## Global Image Pull Secrets
+  # global.imagePullSecrets -- Global Docker Image Pull Secrets declaration. Added to local Docker Image Pull Secrets.
+  imagePullSecrets: []
+
+  ## Version Capabilities
+  # global.kubeCapabilities -- Overwrite the Kube GitVersion
+  # @default -- `$.Capabilities.KubeVersion.GitVersion`
+  kubeCapabilities: ""
+
+  ## Define Container Timezone
+  # timezone -- Define Container Timezone (Sets TZ Environment)
+  timezone: "Europe/Zurich"
+
+  ## Proxy Values
+  proxy:
+  
+    ## HTTP Proxy Configuration
+    httpProxy:
+  
+      ## HTTP Proxy Host Configuration
+      # -- Configure HTTP Proxy Hostname/IP (without protocol://)
+      host: ""
+  
+      ## HTTP Proxy Port Configuration
+      # -- (int) Configure HTTP Proxy Port
+      port:
+  
+      ## HTTP Proxy Protocol Configuration
+      # -- Configure HTTP Proxy Protocol (http/https)
+      # @default -- http
+      protocol: ""
+  
+    ## HTTPS Proxy Configuration
+    httpsProxy:
+  
+      ## HTTPS Proxy Host Configuration
+      # -- Configure HTTPS Proxy Hostname/IP (without protocol://)
+      host: ""
+  
+      ## HTTP Proxy Port Configuration
+      # -- (int) Configure HTTPS Proxy Port
+      port:
+  
+      ## HTTP Proxy Protocol Configuration
+      # -- Configure HTTPS Proxy Protocol (http/https)
+      # @default -- http
+      protocol: ""
+  
+    ## No Proxy Hosts Configuration
+    # -- Configure No Proxy Hosts
+    # noProxy: [ "localhost", "127.0.0.1" ]
+    noProxy: []
+
+{{- end }}
