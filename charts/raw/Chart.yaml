@@ -1,0 +1,26 @@
+apiVersion: v2
+name: raw
+description: 'Render raw kubernetes manifests managed by a helm release'
+type: application
+version: 2.0.1
+appVersion: 1.0.0
+icon: 'https://www.bedag.ch/wGlobal/wGlobal/layout/images/logo.svg'
+home: 'https://github.com/bedag/helm-charts/tree/master/charts/raw'
+keywords:
+  - raw
+  - templates
+  - resources
+maintainers:
+  - name: SRE
+    email: sre@bedag.ch
+dependencies:
+  - name: 'library'
+    version: '3.0.0-rc.3'
+    repository: 'file://../library'
+sources:
+  - https://github.com/bedag/helm-charts/tree/master/charts/raw
+annotations:
+  artifacthub.io/containsSecurityUpdates: 'false'
+  artifacthub.io/changes: |
+    - "[Changed]: Bump Dependency library to 3.0.0-rc.3"
+  artifacthub.io/prerelease: 'false'

@@ -95,8 +95,9 @@ resource "helm_release" "bootstrap" {
 
   name       = each.key
   namespace  = "argocd"
-  repository = "https://bedag.github.io/helm-charts/"
+  repository = "${path.module}/charts"
   chart      = "raw"
+  dependency_update = true
   version    = "2.0.0"
 
   values = [
