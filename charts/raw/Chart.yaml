@@ -16,7 +16,7 @@ maintainers:
 dependencies:
   - name: 'library'
     version: '3.0.0-rc.3'
-    repository: '../'
+    repository: 'file://../library'
 sources:
   - https://github.com/bedag/helm-charts/tree/master/charts/raw
 annotations:

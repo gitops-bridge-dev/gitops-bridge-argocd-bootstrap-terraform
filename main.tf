@@ -95,7 +95,7 @@ resource "helm_release" "bootstrap" {
 
   name       = each.key
   namespace  = "argocd"
-  repository = "${path.module}/helm"
+  repository = "${path.module}/charts"
   chart      = "raw"
   version    = "2.0.0"
 
