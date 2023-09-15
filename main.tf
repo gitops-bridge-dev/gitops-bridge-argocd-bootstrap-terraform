@@ -97,6 +97,7 @@ resource "helm_release" "bootstrap" {
   namespace  = "argocd"
   repository = "${path.module}/charts"
   chart      = "raw"
+  dependency_update = true
   version    = "2.0.0"
 
   values = [
