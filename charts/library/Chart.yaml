@@ -1,0 +1,28 @@
+apiVersion: v2
+name: library
+description: Buttahtoast Helm Library
+type: library
+version: 3.0.0-rc.3
+appVersion: 0.1.0
+home: https://github.com/buttahtoast/helm-charts/tree/master/charts/library
+icon: "https://avatars0.githubusercontent.com/u/67652090?s=400&u=874d1c989b0afc2789865be01051f0bbfc84ae32&v=4"
+keywords:
+  - library
+  - sprig
+maintainers:
+  - name: oliverbaehler
+    email: oliverbaehler@hotmail.com
+  - name: chifu1234
+    email: kk@sudo-i.net
+sources:
+  - https://github.com/buttahtoast/helm-charts/tree/master/charts/library
+annotations:
+  artifacthub.io/containsSecurityUpdates: "false"
+  artifacthub.io/changes: |
+    - "[Added]: Added function `lib.utils.dicts.merge`"
+    - "[Changed]: Timezone Value is now looked up via `$.Values.global.timezone`, was `$.Values.timezone` (Breaking)"
+    - "[Changed]: Proxy Values are now looked up via `$.Values.global.proxy.*`, was `$.Values.proxy.*` (Breaking)"
+    - "[Removed]: Removed template `lib.utils.globals.imagePullPolicy` (Breaking)"
+    - "[Removed]: Removed template `lib.utils.globals.storageClass` (Breaking)"
+    - "[Removed]: Removed template `lib.utils.globals.image` (Breaking)"
+  artifacthub.io/prerelease: "true"
