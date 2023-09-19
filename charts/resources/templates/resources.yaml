@@ -3,6 +3,6 @@
 {{ if typeIs "string" . }}
     {{- tpl . $ }}
 {{- else }}
-    {{- tpl (toYaml .) $ }}
+    {{- toYaml . }}
 {{- end }}
 {{ end }}
