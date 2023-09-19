@@ -93,10 +93,10 @@ resource "kubernetes_secret_v1" "cluster" {
 resource "helm_release" "bootstrap" {
   for_each = var.create ? var.argocd_bootstrap_app_of_apps : {}
 
-  name       = each.key
-  namespace  = try(var.argocd.namespace, "argocd")
-  chart      = "${path.module}/charts/resources"
-  version    = "1.0.0"
+  name      = each.key
+  namespace = try(var.argocd.namespace, "argocd")
+  chart     = "${path.module}/charts/resources"
+  version   = "1.0.0"
 
   values = [
     <<-EOT
