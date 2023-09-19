@@ -8,5 +8,5 @@ output "cluster" {
 }
 output "apps" {
   description = "ArgoCD apps"
-  value       = try(kubectl_manifest.bootstrap, null)
+  value       = try(helm_release.bootstrap, null)
 }
