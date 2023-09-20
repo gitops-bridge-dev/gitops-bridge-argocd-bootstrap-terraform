@@ -36,32 +36,26 @@ locals {
     }
   )
 
-  argocd_bootstrap_app_of_apps = {
+  argocd_apps = {
     addons = file("${path.module}/bootstrap/addons.yaml")
+    workloads = file("${path.module}/bootstrap/workloads.yaml")
   }
 
 }
 
-###########################################################################
-# GitOps Bridge: Metadata
-###########################################################################
-module "gitops_bridge_metadata" {
-  source = "github.com/gitops-bridge-dev/gitops-bridge-argocd-metadata-terraform?ref=v1.0.0"
-
-  cluster_name = local.name
-  environment  = local.environment
-  metadata     = local.addons_metadata
-  addons       = local.addons
-}
-
-###########################################################################
+################################################################################
 # GitOps Bridge: Bootstrap
-###########################################################################
+################################################################################
 module "gitops_bridge_bootstrap" {
-  source = "github.com/gitops-bridge-dev/gitops-bridge-argocd-bootstrap-terraform?ref=v1.0.0"
+  source = "github.com/gitops-bridge-dev/gitops-bridge-argocd-bootstrap-terraform?ref=v2.0.0"
 
-  argocd_cluster               = module.gitops_bridge_metadata.argocd
-  argocd_bootstrap_app_of_apps = local.argocd_bootstrap_app_of_apps
+  cluster = {
+    cluster_name = local.name
+    environment  = local.environment
+    metadata     = local.addons_metadata
+    addons       = local.addons
+  }
+  apps = local.argocd_apps
 }
 
 ```
@@ -73,7 +67,6 @@ module "gitops_bridge_bootstrap" {
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 2.10.1 |
-| <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | >= 1.14 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.22.0 |
 
 ## Providers
@@ -99,11 +92,11 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_apps"></a> [apps](#input\_apps) | argocd app of apps to deploy | `any` | `{}` | no |
 | <a name="input_argocd"></a> [argocd](#input\_argocd) | argocd helm options | `any` | `{}` | no |
-| <a name="input_argocd_bootstrap_app_of_apps"></a> [argocd\_bootstrap\_app\_of\_apps](#input\_argocd\_bootstrap\_app\_of\_apps) | argocd app of apps to deploy | `any` | `{}` | no |
-| <a name="input_argocd_cluster"></a> [argocd\_cluster](#input\_argocd\_cluster) | argocd cluster secret | `any` | `null` | no |
-| <a name="input_argocd_create_install"></a> [argocd\_create\_install](#input\_argocd\_create\_install) | Deploy argocd helm | `bool` | `true` | no |
+| <a name="input_cluster"></a> [cluster](#input\_cluster) | argocd cluster secret | `any` | `null` | no |
 | <a name="input_create"></a> [create](#input\_create) | Create terraform resources | `bool` | `true` | no |
+| <a name="input_install"></a> [install](#input\_install) | Deploy argocd helm | `bool` | `true` | no |
 
 ## Outputs
 

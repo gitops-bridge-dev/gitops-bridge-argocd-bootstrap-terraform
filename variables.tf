@@ -8,19 +8,19 @@ variable "argocd" {
   type        = any
   default     = {}
 }
-variable "argocd_create_install" {
+variable "install" {
   description = "Deploy argocd helm"
   type        = bool
   default     = true
 }
 
-variable "argocd_cluster" {
+variable "cluster" {
   description = "argocd cluster secret"
   type        = any
   default     = null
 }
 
-variable "argocd_bootstrap_app_of_apps" {
+variable "apps" {
   description = "argocd app of apps to deploy"
   type        = any
   default     = {}

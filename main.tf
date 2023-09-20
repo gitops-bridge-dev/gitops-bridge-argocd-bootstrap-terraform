@@ -2,7 +2,7 @@
 # Install ArgoCD
 ################################################################################
 resource "helm_release" "argocd" {
-  count = var.create && var.argocd_create_install ? 1 : 0
+  count = var.create && var.install ? 1 : 0
 
   # https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/Chart.yaml
   # (there is no offical helm chart for argocd)
@@ -72,16 +72,64 @@ resource "helm_release" "argocd" {
 
 }
 
+
+################################################################################
+# ArgoCD Cluster
+################################################################################
+locals {
+  cluster_name = try(var.cluster.cluster_name, "in-cluster")
+  environment  = try(var.cluster.environment, "dev")
+  argocd_labels = merge({
+    cluster_name                     = local.cluster_name
+    environment                      = local.environment
+    enable_argocd                    = true
+    "argocd.argoproj.io/secret-type" = "cluster"
+    },
+    try(var.cluster.addons, {})
+  )
+  argocd_annotations = merge(
+    {
+      cluster_name = local.cluster_name
+      environment  = local.environment
+    },
+    try(var.cluster.metadata, {})
+  )
+}
+
+locals {
+  config = <<-EOT
+    {
+      "tlsClientConfig": {
+        "insecure": false
+      }
+    }
+  EOT
+  argocd = {
+    apiVersion = "v1"
+    kind       = "Secret"
+    metadata = {
+      name        = try(var.cluster.secret_name, local.cluster_name)
+      namespace   = try(var.cluster.secret_namespace, "argocd")
+      annotations = local.argocd_annotations
+      labels      = local.argocd_labels
+    }
+    stringData = {
+      name   = local.cluster_name
+      server = try(var.cluster.server, "https://kubernetes.default.svc")
+      config = try(var.cluster.config, local.config)
+    }
+  }
+}
 resource "kubernetes_secret_v1" "cluster" {
-  count = var.create && (var.argocd_cluster != null) ? 1 : 0
+  count = var.create && (var.cluster != null) ? 1 : 0
 
   metadata {
-    name        = var.argocd_cluster.metadata.name
-    namespace   = var.argocd_cluster.metadata.namespace
-    annotations = var.argocd_cluster.metadata.annotations
-    labels      = var.argocd_cluster.metadata.labels
+    name        = local.argocd.metadata.name
+    namespace   = local.argocd.metadata.namespace
+    annotations = local.argocd.metadata.annotations
+    labels      = local.argocd.metadata.labels
   }
-  data = var.argocd_cluster.stringData
+  data = local.argocd.stringData
 
   depends_on = [helm_release.argocd]
 }
@@ -91,7 +139,7 @@ resource "kubernetes_secret_v1" "cluster" {
 # Create App of Apps
 ################################################################################
 resource "helm_release" "bootstrap" {
-  for_each = var.create ? var.argocd_bootstrap_app_of_apps : {}
+  for_each = var.create ? var.apps : {}
 
   name      = each.key
   namespace = try(var.argocd.namespace, "argocd")
