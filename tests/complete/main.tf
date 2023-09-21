@@ -46,23 +46,13 @@ locals {
     }
   )
 
-  argocd_bootstrap_app_of_apps = {
+  argocd_apps = {
     addons = file("${path.module}/bootstrap/addons.yaml")
+    workloads = file("${path.module}/bootstrap/workloads.yaml")
   }
 
 }
 
-################################################################################
-# GitOps Bridge: Metadata
-################################################################################
-module "gitops_bridge_metadata" {
-  source = "github.com/gitops-bridge-dev/gitops-bridge-argocd-metadata-terraform?ref=v1.0.0"
-
-  cluster_name = local.name
-  environment  = local.environment
-  metadata     = local.addons_metadata
-  addons       = local.addons
-}
 
 ################################################################################
 # GitOps Bridge: Bootstrap
@@ -70,6 +60,11 @@ module "gitops_bridge_metadata" {
 module "gitops_bridge_bootstrap" {
   source = "../../"
 
-  argocd_cluster               = module.gitops_bridge_metadata.argocd
-  argocd_bootstrap_app_of_apps = local.argocd_bootstrap_app_of_apps
+  cluster = {
+    cluster_name = local.name
+    environment  = local.environment
+    metadata     = local.addons_metadata
+    addons       = local.addons
+  }
+  apps = local.argocd_apps
 }
